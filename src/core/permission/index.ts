@@ -20,23 +20,25 @@ export const formarPermsToCascader = () => {
        * ④array：被遍历的对象数组
        *
        */
-      module[key].split(":").reduce((p, k, currentIndex, arr) => {
-        const value = arr.slice(0, currentIndex + 1).join(":");
-        const index = p.findIndex((item) => item?.value === value);
-        if (Number.isInteger(index) && index !== -1) {
-          return p[index].children;
-        } else {
-          const item: DataNode = {
-            // key: k,
-            title: k,
-            label: k,
-            value,
-            children: [],
-          };
-          p.push(item);
-          return item.children!;
-        }
-      }, prev);
+      module[key]
+        .split(":")
+        .reduce((p: any, k: any, currentIndex: number, arr) => {
+          const value = arr.slice(0, currentIndex + 1).join(":");
+          const index = p.findIndex((item) => item?.value === value);
+          if (Number.isInteger(index) && index !== -1) {
+            return p[index].children;
+          } else {
+            const item: DataNode = {
+              // key: k,
+              title: k,
+              label: k,
+              value,
+              children: [],
+            };
+            p.push(item);
+            return item.children!;
+          }
+        }, prev);
     });
     return prev;
   }, []);
