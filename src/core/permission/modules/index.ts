@@ -1,6 +1,12 @@
 // 导入文件
 const modulesPermissionFiles = require.context("./", true, /\.ts$/);
 
+interface Permissions {
+  [key: string]: {
+    [key: string]: string;
+  };
+}
+
 /**
  * 根据接口路径生成接口权限码, eg: sys/user/add => sys:user:add
  * @param str 接口路径

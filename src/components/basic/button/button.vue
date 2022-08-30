@@ -13,6 +13,7 @@ import { PropType, ComputedRef, computed } from 'vue';
 import type { ButtonType as AButtonType } from 'ant-design-vue/es/button';
 import { buttonProps, type ButtonType } from './button';
 
+// eslint-disable-next-line no-undef
 const props =defineProps({
 	...buttonProps(),
 	type:{

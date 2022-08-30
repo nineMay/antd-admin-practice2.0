@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import { setupAntd } from "./plugins";
 import router from "./router";
 import store from "./store";
 
@@ -16,5 +17,5 @@ const app = createApp(App);
 
 function setupPlugins() {
   /** 注册全局常用的ant-design-vue组件 */
-  setupAtd(app);
+  setupAntd(app);
 }
