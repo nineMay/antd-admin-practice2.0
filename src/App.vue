@@ -1,30 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  
+  <ConfigProvider :locale="getAntdLocale">
+    <router-view #="{ Component }">
+      <component :is="Component" />
+    </router-view>
+    <LockScreen />
+  </ConfigProvider>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
+<script setup lang='ts'>
+    import { ConfigProvider } from 'ant-design-vue';
+import { useLocale } from '@/locales/useLocale';
+import { useRoute } from 'vue-router';
+import { watchEffect } from 'vue';
+import { transformI18n } from './hooks/useI18n';
+import { LockScreen } from '@/components/basic/lockscreen';
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+const route = useRoute();
+    const {getAntdLocale}=useLocale();
 
-    &.router-link-exact-active {
-      color: #42b983;
+    watchEffect(() => {
+    if (route.meta?.title) {
+      // 翻译网页标题
+      document.title = transformI18n(route.meta.title);
     }
-  }
-}
+  });
+</script>
+
+
+<style lang='less' >
+
 </style>
