@@ -1,5 +1,7 @@
 // 导入文件
 const modulesPermissionFiles = require.context("./", true, /\.ts$/);
+console.log(modulesPermissionFiles);
+console.log(modulesPermissionFiles.keys());
 
 interface Permissions {
   [key: string]: {
@@ -23,12 +25,17 @@ export const permissions: Permissions = modulesPermissionFiles
   .keys()
   .reduce((modules, modulePath) => {
     if (filterDirs.some((n) => modulePath.includes(n))) return modules;
+
+    console.log(modules);
     // set './app.js' => 'app'
     // set './sys/app.js' => 'sysApp'
     const moduleName = modulePath
       .replace(/^\.\/(.*)\.\w+$/, "$1")
       .replace(/[-_/][a-z]/gi, (s) => s.substring(1).toUpperCase());
-    const value = modulesPermissionFiles(modulePath).default;
+
+    const data = modulesPermissionFiles(modulePath);
+    console.log(data);
+    const value = data.default;
 
     // pass sys/user/add => sys:user:add
     const permissionModule = Object.keys(value).reduce((obj, key) => {
@@ -40,3 +47,5 @@ export const permissions: Permissions = modulesPermissionFiles
     // console.log('permissions modules', modules);
     return modules;
   }, {});
+
+console.log("permissions", permissions);

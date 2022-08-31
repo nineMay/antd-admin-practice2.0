@@ -6,7 +6,6 @@
 </Button>
 </template>
 
-
 <script setup lang='ts'>
 import {Button} from 'ant-design-vue';
 import { PropType, ComputedRef, computed } from 'vue';
@@ -30,8 +29,8 @@ const buttonType=computed(()=>{
 
 
 <style lang='less' scoped>
- @import 'styles/success';
+//  @import 'styles/success';
 </style>
 <style lang="less" scoped>
-  @import 'styles/warning';
+  // @import 'styles/warning';
 </style>
