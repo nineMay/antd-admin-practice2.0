@@ -6,7 +6,7 @@ import { LOGIN_NAME } from "./constant";
  * RouteRecordRaw为类型校验，限制路由对象类型
  */
 export const LoginRoute: RouteRecordRaw = {
-  path: "login",
+  path: "/login",
   name: LOGIN_NAME,
   component: () => import("@/views/login/login.vue"),
   meta: {

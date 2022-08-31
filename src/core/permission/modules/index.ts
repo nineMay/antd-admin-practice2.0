@@ -5,8 +5,8 @@ interface Permissions {
 }
 
 const modulesPermissionFiles = require.context("./", true, /\.ts$/);
-console.log(modulesPermissionFiles);
-console.log(modulesPermissionFiles.keys());
+// console.log(modulesPermissionFiles);
+// console.log(modulesPermissionFiles.keys());
 
 /**
  * 根据接口路径生成接口权限码, eg: sys/user/add => sys:user:add
@@ -24,13 +24,13 @@ export const permissions: Permissions = modulesPermissionFiles
   .keys()
   .reduce((modules, modulePath) => {
     if (filterDirs.some((n) => modulePath.includes(n))) return modules;
-    console.log(modules);
+    // console.log(modules);
     // set './app.js' => 'app'
     // set './sys/app.js' => 'sysApp'
     const moduleName = modulePath
       .replace(/^\.\/(.*)\.\w+$/, "$1")
       .replace(/[-_/][a-z]/gi, (s) => s.substring(1).toUpperCase());
-    console.log(modulesPermissionFiles(modulePath));
+    // console.log(modulesPermissionFiles(modulePath));
     const value = modulesPermissionFiles(modulePath).default;
 
     // pass sys/user/add => sys:user:add
@@ -43,4 +43,4 @@ export const permissions: Permissions = modulesPermissionFiles
     // console.log('permissions modules', modules);
     return modules;
   }, {});
-console.log("permissions", permissions);
+// console.log("permissions", permissions);

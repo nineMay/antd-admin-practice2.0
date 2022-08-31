@@ -2,7 +2,7 @@
 
 <div>
 	<div>
-		<img/>
+		<img src="~@/assets/images/logo.png" width="45px"/>
 		<h1></h1>
 	</div>
 	<a-form>
