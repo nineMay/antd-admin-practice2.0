@@ -1,5 +1,4 @@
-<template>
-  
+<template> 
   <ConfigProvider :locale="getAntdLocale">
     <router-view #="{ Component }">
       <component :is="Component" />

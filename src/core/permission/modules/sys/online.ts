@@ -1,6 +1,6 @@
 export const sysOnline = {
-  list: 'sys/online/list',
-  kick: 'sys/online/kick',
+  list: "sys/online/list",
+  kick: "sys/online/kick",
 } as const;
 
 export const values = Object.values(sysOnline);
