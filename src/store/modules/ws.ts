@@ -56,6 +56,7 @@ export const useWsStore = defineStore({
       });
       ws.subscribe(EVENT_UPDATE_MENU, () => {
         const userStore = useUserStore();
+        // const tabsViewStore=userTabsViewStore();
       });
     },
   },
