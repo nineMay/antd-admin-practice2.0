@@ -1,10 +1,17 @@
-import { RouteLocationNormalized, Router } from "vue-router";
-import { LOGIN_NAME, WhiteNameList } from "./constant";
-import { NProgress } from "nprogress";
+import {
+  isNavigationFailure,
+  RouteLocationNormalized,
+  Router,
+} from "vue-router";
+import { LOGIN_NAME, REDIRECT_NAME, WhiteNameList } from "./constant";
+import NProgress from "nprogress"; // progress bar
 import { useUserStore } from "@/store/modules/user";
 import { ACCESS_TOKEN_KEY } from "@/enums/cacheEnum";
 import { Storage } from "@/utils/Storage";
 import { to as _to } from "@/utils/awaitTo";
+import { useKeepAliveStore } from "@/store/modules/keepAlive";
+
+NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const defaultRoutePath = "/datashboard/welcome";
 export function createRouterGuards(
@@ -59,10 +66,48 @@ export function createRouterGuards(
   });
 
   /** 获取路由对应的组件名称 */
-  const getComponentName=(route:RouteLocationNormalized)=>{
-    return route.matched.find(item=>item.name===route.name)?.components?.default.name;
+  const getComponentName = (route: RouteLocationNormalized) => {
+    return route.matched.find((item) => item.name === route.name)?.components
+      ?.default.name;
   };
-  router.afterEach(to,form,failure)=>{
-    
-  }
+  router.afterEach((to, from, failure) => {
+    const keepAliveStore = useKeepAliveStore();
+    const token = Storage.get(ACCESS_TOKEN_KEY, null);
+
+    if (isNavigationFailure(failure)) {
+      console.error("failed navigation", failure);
+    }
+    /**在这里设置需要缓存的组件名称 */
+    const toCompName = getComponentName(to);
+    /** 判断当前页面是否开启缓存，如果开启，则将当前页面的componentName信息存入keep-alive全局状态 */
+    if (to.meta?.keepAlive) {
+      /** 需要缓存的组件 */
+      if (toCompName) {
+        keepAliveStore.add(toCompName);
+      } else {
+        console.warn(
+          `${to.fullPath}页面组件的keepAlive为true但未设置组件名，会导致缓存失效，请检查`
+        );
+      }
+    } else {
+      /** 不需要缓存 */
+      if (toCompName) {
+        keepAliveStore.remove(toCompName);
+      }
+    }
+    /** 如果进入的是Redirect页面，则也将离开页面的缓存清空（刷新页面的操作） */
+    if (to.name === REDIRECT_NAME) {
+      const fromCompName = getComponentName(from);
+      fromCompName && keepAliveStore.remove(fromCompName);
+    }
+    /** 如果用户已登出，则清空所有缓存的组件 */
+    if (!token) {
+      keepAliveStore.clear();
+    }
+    NProgress.done();
+  });
+
+  router.onError((error) => {
+    console.log(error, "路由错误");
+  });
 }
