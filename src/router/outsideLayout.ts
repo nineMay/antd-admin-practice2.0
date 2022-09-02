@@ -8,7 +8,7 @@ import { LOGIN_NAME } from "./constant";
 export const LoginRoute: RouteRecordRaw = {
   path: "/login",
   name: LOGIN_NAME,
-  component: () => import("@/views/login/login.vue"),
+  component: () => import("@/views/login/index.vue"),
   meta: {
     title: "登录",
   },

@@ -1,8 +1,10 @@
 <template>
 	<!-- @  v-on,:  v-bind -->
-<Button v-bind="props" :danger="['danger'].includes(type)" :type="buttonType" :class="[`ant-button-${type}`]">
+<Button v-bind="props" :danger="['danger'].includes(type)" :type="buttonType" :class="[`ant-btn-${type}`]">
 	<!-- v-slot的缩写是# -->
-<template v-for="(_,key) in $slots" #[key]></template>
+<template v-for="(_,key) in $slots" #[key]>
+<slot :name="key"></slot>
+</template>
 </Button>
 </template>
 
@@ -29,8 +31,8 @@ const buttonType=computed(()=>{
 
 
 <style lang='less' scoped>
-//  @import 'styles/success';
+ @import 'styles/success';
 </style>
 <style lang="less" scoped>
-  // @import 'styles/warning';
+  @import 'styles/warning';
 </style>

@@ -60,7 +60,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
 import { getImageCaptcha } from '@/api/login';
-import to from '@/utils/awaitTo';
+import {to} from '@/utils/awaitTo';
 
 /** ref和reactive都是用来定义响应式数据的，reactive更适合用于定义复杂的数据类型，ref更适合定义基本类型
  * ref和reactive本质：ref是对reactive的二次包装，ref定义的数据，我们在访问的时候要多一个.value
@@ -83,8 +83,7 @@ const userStore=useUserStore();
 
 	/** 生成验证码 */
 const setCaptcha=async ()=>{
-  // http://localhost:8098/api/admin/captcha/img?width=100&height=50
-  // http://localhost:8080/api/admin/captcha/img?width=100&height=50
+  /** 生成验证码接口 */
   const {id,img}=await getImageCaptcha({width:100,height:50});
   state.captcha=img;
   state.formInline.captchaId=id;
