@@ -93,7 +93,7 @@ setCaptcha();
 
 const handleSubmit=async ()=>{
 const {username,password,verifyCode}=state.formInline;
-if(username.trim()==''||password.trim()){
+if(username.trim()==''||password.trim()==''){
   return message.warning('用户名和密码不能为空！！');
 }
 if(!verifyCode){
