@@ -5,6 +5,7 @@ import type { AxiosRequestConfig } from "axios";
 import { ACCESS_TOKEN_KEY } from "@/enums/cacheEnum";
 import { Storage } from "@/utils/Storage";
 import { useUserStore } from "@/store/modules/user";
+import { uniqueSlash } from "./urlUtils";
 // import {ExclamationCircleOutlined} from '@ant-design/icons'
 
 export interface RequestOptions {
@@ -25,6 +26,8 @@ const UNKNOWN_ERROR = "未知错误，请重试";
 // const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 /** 真实请求的路径前缀 */
 const baseApiUrl = process.env.VUE_APP_BASE_API;
+console.log(process.env);
+
 /** mock请求路径前缀 */
 const baseMockUrl = process.env.VUE_APP_MOCK_API;
 
@@ -122,7 +125,9 @@ export const request = async <T = any>(
       return $message.error("你没有访问该接口的权限，请联系管理员！");
     }
     const fullUrl = `${(isMock ? baseMockUrl : baseApiUrl) + config.url}`;
-    // config.url = uniqueSlash(fullUrl);
+    config.url = uniqueSlash(fullUrl);
+    console.log(baseApiUrl);
+
     // if (IS_PROD) {
     //   // 保持api请求的协议与当前访问的站点协议一致
     //   config.url.replace(/^https?:/g, location.protocol);

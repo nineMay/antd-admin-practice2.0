@@ -18,7 +18,7 @@ export function to<T, U = Error>(
          * 4.原始类型会被包装为对象
          * 5.异常会打断后续拷贝任务*/
         const parsedError = Object.assign({}, err, errorExt);
-        return [err, undefined];
+        return [parsedError, undefined];
       }
       return [err, undefined];
     });

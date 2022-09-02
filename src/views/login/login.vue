@@ -59,6 +59,8 @@
 	import { message, Modal } from 'ant-design-vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
+import { getImageCaptcha } from '@/api/login';
+import to from '@/utils/awaitTo';
 
 /** ref和reactive都是用来定义响应式数据的，reactive更适合用于定义复杂的数据类型，ref更适合定义基本类型
  * ref和reactive本质：ref是对reactive的二次包装，ref定义的数据，我们在访问的时候要多一个.value
@@ -79,12 +81,44 @@ const route =useRoute();
 const router=useRouter();
 const userStore=useUserStore();
 
-const setCaptcha=()=>{
-	//
-}
+	/** 生成验证码 */
+const setCaptcha=async ()=>{
+  // http://localhost:8098/api/admin/captcha/img?width=100&height=50
+  // http://localhost:8080/api/admin/captcha/img?width=100&height=50
+  const {id,img}=await getImageCaptcha({width:100,height:50});
+  state.captcha=img;
+  state.formInline.captchaId=id;
+};
 
-const handleSubmit=()=>{
-//
+setCaptcha();
+
+const handleSubmit=async ()=>{
+const {username,password,verifyCode}=state.formInline;
+if(username.trim()==''||password.trim()){
+  return message.warning('用户名和密码不能为空！！');
+}
+if(!verifyCode){
+  return message.warning('请输入验证码！');
+}
+message.loading('登录中...',0);
+state.loading=true;
+console.log(state.formInline);
+const [err]=await to(userStore.login(state.formInline));
+if(err){
+  Modal.error({
+    title:()=>'提示',
+    content:()=>err.message,});
+    /** 生成验证码 */
+    setCaptcha();
+}else{
+  message.success('登录成功！');
+  setTimeout(() => {
+   router.replace((route.query.redirect as string)?? '/'); 
+  });
+}
+state.loading=false;
+message.destroy();
+
 };
 </script>
 

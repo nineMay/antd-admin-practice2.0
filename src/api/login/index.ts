@@ -22,8 +22,7 @@ export function login(data: API.LoginParams) {
 /**
  * @description 获取验证码
  */
-
-export function getImageCaptcha(params: API.CaptchaParams) {
+export function getImageCaptcha(params?: API.CaptchaParams) {
   return request<API.CaptchaResult>({
     url: "captcha/img",
     method: "get",
