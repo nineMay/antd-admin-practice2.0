@@ -7,6 +7,7 @@ import {
 import HomeView from "../views/HomeView.vue";
 import { whiteNameList } from "./constant";
 import outsideLayout from "./outsideLayout";
+import { createRouterGuards } from "./router-guards";
 
 export const routes: Array<RouteRecordRaw> = [
   /** 路由 */
@@ -56,9 +57,11 @@ export function resetRouter() {
   });
 }
 
-export function setupRouter(app: App) {
+export async function setupRouter(app: App) {
   //创建路由守卫
-  createRouterGuards();
+  createRouterGuards(router, whiteNameList);
+  app.use(router);
+  await router.isReady();
 }
 
 export default router;

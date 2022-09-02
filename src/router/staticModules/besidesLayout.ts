@@ -5,7 +5,7 @@ import router from "..";
 /** 主要用于刷新当前页面 */
 export const REDIRECT_ROUTE: RouteRecordRaw = {
   path: "/redirect",
-  component: LayoutParentView,
+  component: RouterView,
   name: "RedirectTo",
   meta: {
     title: REDIRECT_NAME,
@@ -17,7 +17,7 @@ export const REDIRECT_ROUTE: RouteRecordRaw = {
     {
       path: "/redirect/:path(.*)",
       name: REDIRECT_NAME,
-      component: LayoutParentView,
+      component: RouterView,
       meta: {
         title: REDIRECT_NAME,
         /** 不在菜单中显示 */

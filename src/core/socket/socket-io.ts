@@ -1,6 +1,7 @@
 import { useUserStore } from "@/store/modules/user";
 import { useWsStore } from "@/store/modules/ws";
 import { isEmpty, isFunction } from "lodash";
+import IO, { type Socket } from "socket.io-client";
 
 export type SocketIOWrapperType = InstanceType<typeof SocketIOWrapper>;
 

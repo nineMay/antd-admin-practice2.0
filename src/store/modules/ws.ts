@@ -7,6 +7,7 @@ import {
 } from "@/core/socket/socket-io";
 import { Modal } from "ant-design-vue";
 import { defineStore } from "pinia";
+import { store } from "@/store";
 import { useUserStore } from "./user";
 
 interface WsState {
@@ -59,5 +60,16 @@ export const useWsStore = defineStore({
         // const tabsViewStore=userTabsViewStore();
       });
     },
+
+    /**关闭 Socket连接 */
+    closeSocket() {
+      this.client?.close?.();
+      this.setClient(null);
+    },
   },
 });
+
+/** 在组件setup函数外使用 */
+export function useWsStoreWithOut() {
+  return useWsStore(store);
+}

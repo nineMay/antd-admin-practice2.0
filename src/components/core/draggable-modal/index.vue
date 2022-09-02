@@ -252,6 +252,7 @@
   };
 
   watch(visibleModel, async (val) => {
+    /** Object.is(a,b): 判断a,b两个参数的值是否相同 */
     if ((val && Object.is(inited, false)) || props.destroyOnClose) {
       initDrag();
     }

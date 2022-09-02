@@ -189,5 +189,13 @@ export const useUserStore = defineStore({
         return Promise.reject(error);
       }
     },
+    /** 登出 */
+    async logout() {
+      await logout();
+      const wsStore = useWsStore();
+      wsStore.closeSocket();
+      this.resetToken();
+      resetRouter();
+    },
   },
 });

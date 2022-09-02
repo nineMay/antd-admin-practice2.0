@@ -10,6 +10,7 @@ import { constantRouterComponents } from "./asyncModules";
 import { PermissionType } from "@/core/permission/modules/types";
 import common from "@/router/staticModules";
 import { uniqueSlash } from "@/utils/urlUtils";
+import outsideLayout from "./outsideLayout";
 
 //需要放在所有路由之后的路由
 const endRoutes: RouteRecordRaw[] = [REDIRECT_ROUTE, errorRoute, notFound];
@@ -27,7 +28,12 @@ export function filterAsyncRoute(
     .map((item) => {
       const { router, viewPath, name, icon, orderNum, keepalive } = item;
       let fullPath = "";
-      const pathPrefix = lastNamePath.at(-1) || "";
+      /** lastNamePath.at(-1):用于获取最后的字符串 */
+      // const pathPrefix = lastNamePath.at(-1) || "";
+      const pathPrefix = lastNamePath[lastNamePath.length - 1] || "";
+
+      // console.log(lastNamePath.at(-1), lastNamePath[-1]);
+
       if (isUrl(router)) {
         fullPath = router;
       } else {
@@ -115,11 +121,28 @@ export const generatorDynamicRouter = (asyncMenus: API.Menu[]) => {
     const layout = routes.find((item) => item.name === "Layout")!;
     // 给公共路由添加namePath
     generatorNamePath(common);
-		const menus=[...common,...routeList,...endRoutes];
-		layout.children=menus;
-		const removeRoute=router.addRoute(layout);
-		/** 获取所有没有包含children的路由，上面addRoute的时候，vue-router已经帮我们拍平了所有路由 */
-		const filterRoutes=router.getRoutes().filter(item=>)
+    const menus = [...common, ...routeList, ...endRoutes];
+    layout.children = menus;
+    const removeRoute = router.addRoute(layout);
+    /** 获取所有没有包含children的路由，上面addRoute的时候，vue-router已经帮我们拍平了所有路由 */
+    const filterRoutes = router
+      .getRoutes()
+      .filter(
+        (item) =>
+          (!item.children.length ||
+            Object.is(item.meta?.hideChildrenInMenu, true)) &&
+          !outsideLayout.some((n) => n.name === item.name)
+      );
+    /** 清空所有路由 */
+    removeRoute();
+    layout.children = [...filterRoutes];
+    /** 重新添加拍平后的路由 */
+    router.addRoute(layout);
+    console.log("所有路由", router.getRoutes());
+    return Promise.resolve({
+      menus,
+      routes: layout.children,
+    });
   } catch (error) {
     console.error("生成路由时出错", error);
     /** 返回错误原因 */

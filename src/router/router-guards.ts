@@ -1,4 +1,4 @@
-import { Router } from "vue-router";
+import { RouteLocationNormalized, Router } from "vue-router";
 import { LOGIN_NAME, WhiteNameList } from "./constant";
 import { NProgress } from "nprogress";
 import { useUserStore } from "@/store/modules/user";
@@ -30,8 +30,39 @@ export function createRouterGuards(
         if (useStore.menus.length === 0) {
           //从后台获取菜单
           const [err] = await _to(useStore.afterLogin());
+          if (err) {
+            useStore.resetToken();
+            return next({ name: LOGIN_NAME });
+          }
+          if (!hasRoute) {
+            /** 如果该路由不存在，可能是动态注册的路由，它还没准备好，需要再重定向一次到该路由 */
+            next({ ...to, replace: true });
+          } else {
+            next();
+          }
+        } else {
+          next();
         }
+      }
+    } else {
+      //not LOGIN
+      if (whiteNameList.some((n) => n === to.name)) {
+        next();
+      } else {
+        next({
+          name: LOGIN_NAME,
+          query: { redirect: to.fullPath },
+          replace: true,
+        });
       }
     }
   });
+
+  /** 获取路由对应的组件名称 */
+  const getComponentName=(route:RouteLocationNormalized)=>{
+    return route.matched.find(item=>item.name===route.name)?.components?.default.name;
+  };
+  router.afterEach(to,form,failure)=>{
+    
+  }
 }

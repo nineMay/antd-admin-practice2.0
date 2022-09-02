@@ -15,6 +15,7 @@
     "lodash-es": "^4.17.15",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.18",
+    "socket.io-client": "^4.5.1",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
     "vue-i18n": "^9.2.2",
