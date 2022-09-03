@@ -2,6 +2,7 @@ import { RouteRecordRaw, RouterView } from "vue-router";
 import { REDIRECT_NAME } from "../constant";
 import LayoutParentView from "@/layout/routerView/index.vue";
 import router from "..";
+
 /** 主要用于刷新当前页面 */
 export const REDIRECT_ROUTE: RouteRecordRaw = {
   path: "/redirect",
@@ -54,6 +55,7 @@ export const REDIRECT_ROUTE: RouteRecordRaw = {
             });
           }
         });
+        return true;
       },
     },
   ],

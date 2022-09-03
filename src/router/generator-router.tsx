@@ -118,7 +118,7 @@ export const generatorDynamicRouter = (asyncMenus: API.Menu[]) => {
     const routeList = filterAsyncRoute(asyncMenus);
     // ！：将变量转换为boolean类型，并取反
     // ！！：做类型判断，例如：if(!!a){//a 有值的时候才执行}
-    const layout = routes.find((item) => item.name === "Layout")!;
+    const layout = routes.find((item) => item.name == "Layout")!;
     // 给公共路由添加namePath
     generatorNamePath(common);
     const menus = [...common, ...routeList, ...endRoutes];
@@ -156,7 +156,7 @@ export const generatorDynamicRouter = (asyncMenus: API.Menu[]) => {
  * @param {string[]} namePath
  */
 export const generatorNamePath = (
-  routers: RouteRecordRaw[],
+  routes: RouteRecordRaw[],
   namePath?: string[],
   parent?: RouteRecordRaw
 ) => {
